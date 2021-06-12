@@ -24,6 +24,7 @@ def sigmoid(arg):
 def der(arg):
     return arg *(1 - arg)
 
+
 #!!!
 # return an array of arrays, where every neuron discribes like array of weights
 #!!!

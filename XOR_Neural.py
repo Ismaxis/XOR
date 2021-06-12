@@ -3,7 +3,7 @@ from Functions import generating_net, forward, back_prop
 
 
 # file for logging
-File = open(r"F:/python/XOR/Weights.txt", "a")
+File = open("Weights.txt", "a")
 
 # generating struct and random weights
 struct = (2, 3, 1)
