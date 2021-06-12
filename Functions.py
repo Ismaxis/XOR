@@ -5,7 +5,7 @@ class Neu:
     def __init__(self, struct, weights, layer, current_neu, Neurons):
         self.value = None
         self.In = [] #weights which INcome in neuron
-        self.Out = [] #weights which OUTcome from neuron
+        #self.Out = [] #weights which OUTcome from neuron
         self.Parents = []
 
         if layer != 0:
@@ -15,20 +15,14 @@ class Neu:
         else:
             self.Parents = None
             self.In = None
-        
-        if layer != len(struct) - 1:
-            for j in range(struct[layer + 1]):
-                self.Out.append(weights[layer][current_neu][j])
-        else:
-            self.Out = None
-    
-    def activatied(self):
-            return sigmoid(self.value)
 
 
 def sigmoid(arg):
     return 1/(1 + np.exp(-arg))
 
+
+def der(arg):
+    return arg *(1 - arg)
 
 #!!!
 # return an array of arrays, where every neuron discribes like array of weights
@@ -40,21 +34,25 @@ def generating_weights(struct):
         for neu in range(struct[layer]):
             weights[layer].append([])
             for i in range(struct[layer + 1]):
-                weights[layer][neu].append(np.random.randint(0, 100)/100)
+                weights[layer][neu].append(np.random.randint(-100, 100)/100)
 
     return weights
 
 
-def generating_neurons(struct):
+def generating_net(struct):
     weights = generating_weights(struct)
     Neurons = []
+    log = []
     for layer in range(len(struct)):
         Neurons.append([])
         for neuron in range(struct[layer]):
             new_neu = Neu(struct, weights, layer, neuron, Neurons)
             Neurons[layer].append(new_neu)
+            if new_neu.In != None:
+                log.append(new_neu.In)
+            
 
-    return Neurons, weights
+    return Neurons, log # in main code named weigths. 13 str
 
 
 def forward(inp, struct, Neurons):
@@ -73,3 +71,18 @@ def forward(inp, struct, Neurons):
             neuron.value = sigmoid(val)
 
     return Neurons[len(struct) - 1][0].value
+
+
+def back_prop(Neurons, e, struct, lmb):
+
+    delta = e * der(Neurons[2][0].value)
+    
+    for i in range(len(Neurons[1])):
+        Neurons[2][0].In[i] -= lmb * delta * Neurons[1][i].value
+
+    for i in range(len(Neurons[1])):
+        delta2 =  delta * Neurons[2][0].In[i] * der(Neurons[1][i].value)
+        for j in range(len(Neurons[0])):
+            Neurons[1][i].In[j] -= lmb * delta2 * Neurons[0][j].value
+
+    return Neurons
