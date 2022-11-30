@@ -1,4 +1,8 @@
-# XOR
-Neural Network able to decide a XOR logic gate
+# Library for training classifier neural network
 
-In project folder would create the txt file where the results will be saved
+For error reduction standart backpropagation algorithm was used
+
+### Demonstration 
+3 layer net simulating XOR gate
+
+![DEMO](https://user-images.githubusercontent.com/83420512/204865931-c5c61863-bfe9-4a2a-bc72-622c5d518c51.gif)
